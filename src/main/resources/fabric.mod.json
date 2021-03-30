@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "puddles",
+  "version": "${version}",
+
+  "name": "Puddles",
+  "description": "Adds puddles. Compatible with your favorite shaderpacks & mods!",
+  "authors": [
+    "Motschen",
+    "TeamMidnightDust"
+  ],
+  "contact": {
+    "homepage": "https://www.midnightdust.eu/",
+    "sources": "https://github.com/TeamMidnightDust/Puddles",
+    "issues": "https://github.com/TeamMidnightDust/Puddles/issues"
+  },
+
+  "license": "MIT",
+  "icon": "assets/puddles/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "eu.midnightdust.puddles.Puddles"
+    ],
+    "client": [
+      "eu.midnightdust.puddles.PuddlesClient"
+    ]
+  },
+
+  "mixins": [
+    "puddles.mixins.json"
+  ]
+}

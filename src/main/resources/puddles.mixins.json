@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "eu.midnightdust.puddles.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinServerWorld"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
