@@ -121,6 +121,7 @@ public class PuddleBlock extends Block {
         return Collections.emptyList();
     }
 
+    @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         if (world.getBlockState(pos) == Blocks.AIR.getDefaultState() || world.getBlockState(pos) == Puddles.Puddle.getDefaultState()) {
             int i;

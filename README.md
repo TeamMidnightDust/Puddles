@@ -1,2 +1,2 @@
 # Puddles
-Adds Puddles. Compatible with any shaderpack!
+Adds puddles. Compatible with your favorite shaderpacks & mods!

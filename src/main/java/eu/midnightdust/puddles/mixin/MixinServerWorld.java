@@ -29,7 +29,7 @@ public abstract class MixinServerWorld extends World {
     @Shadow protected abstract BlockPos getSurface(BlockPos pos);
 
     @Inject(at = @At("TAIL"),method = "tickChunk")
-    public void tickChunk(WorldChunk chunk, int randomTickSpeed, CallbackInfo ci) {
+    public void puddles$tickChunk(WorldChunk chunk, int randomTickSpeed, CallbackInfo ci) {
         ChunkPos chunkPos = chunk.getPos();
         boolean bl = this.isRaining();
         int x = chunkPos.getStartX();
@@ -41,7 +41,7 @@ public abstract class MixinServerWorld extends World {
             profiler.push("puddles");
             if (bl && random.nextInt(10000 / this.getGameRules().getInt(Puddles.PUDDLE_SPAWN_RATE)) == 0) {
                 pos = this.getSurface(getRandomPosInChunk(x, 0, z, 15));
-                if (this.hasRain(pos) && getBlockState(pos.down()).isSideSolidFullSquare(this, pos, Direction.UP)) {
+                if (this.hasRain(pos) && getBlockState(pos.down()).isSideSolidFullSquare(this, pos, Direction.UP) && Puddles.Puddle.canPlaceAt(null,this,pos)) {
                     setBlockState(pos, Puddles.Puddle.getDefaultState());
                 }
             }
@@ -54,7 +54,9 @@ public abstract class MixinServerWorld extends World {
                 pos = this.getSurface(getRandomPosInChunk(x, 0, z, 15));
                 if (this.getBlockState(pos).getBlock() == Blocks.SNOW && getBlockState(pos.down()).isSideSolidFullSquare(this, pos, Direction.UP)) {
                     int layer = getBlockState(pos).get(Properties.LAYERS);
-                    setBlockState(pos, Blocks.SNOW.getDefaultState().with(Properties.LAYERS, layer + 1));
+                    if (layer < 5) {
+                        setBlockState(pos, Blocks.SNOW.getDefaultState().with(Properties.LAYERS, layer + 1));
+                    }
                 }
             }
             profiler.pop();
