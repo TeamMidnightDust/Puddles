@@ -1,6 +1,7 @@
 package eu.midnightdust.puddles.block;
 
 import eu.midnightdust.puddles.Puddles;
+import eu.midnightdust.puddles.config.PuddlesConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
@@ -52,16 +53,16 @@ public class PuddleBlock extends Block {
             ItemStack waterBottleStack;
             if (item == Items.GLASS_BOTTLE) {
                 if (!world.isClient) {
-                    if (!player.abilities.creativeMode) {
+                    if (!player.isCreative()) {
                         waterBottleStack = PotionUtil.setPotion(new ItemStack(Items.POTION), Potions.WATER);
                         player.incrementStat(Stats.USE_CAULDRON);
                         itemStack.decrement(1);
                         if (itemStack.isEmpty()) {
                             player.setStackInHand(hand, waterBottleStack);
-                        } else if (!player.inventory.insertStack(waterBottleStack)) {
+                        } else if (!player.getInventory().insertStack(waterBottleStack)) {
                             player.dropItem(waterBottleStack, false);
                         } else if (player instanceof ServerPlayerEntity) {
-                            ((ServerPlayerEntity)player).refreshScreenHandler(player.playerScreenHandler);
+                            player.currentScreenHandler.sendContentUpdates();
                         }
                     }
 
@@ -80,7 +81,7 @@ public class PuddleBlock extends Block {
     }
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (!world.isRaining() && random.nextInt(2000) == 0) {
+        if (!world.isRaining() && random.nextInt(10000 / PuddlesConfig.evaporationChance) == 0) {
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
 
@@ -89,7 +90,7 @@ public class PuddleBlock extends Block {
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return context.isAbove(COLLISION_SHAPE, pos, true) ? COLLISION_SHAPE : VoxelShapes.empty();
+        return VoxelShapes.empty();
     }
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {

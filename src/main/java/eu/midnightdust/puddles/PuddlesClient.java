@@ -12,7 +12,6 @@ import java.util.Objects;
 
 import static eu.midnightdust.puddles.Puddles.*;
 
-@SuppressWarnings("deprecation")
 public class PuddlesClient implements ClientModInitializer {
 
     @Override
@@ -20,7 +19,7 @@ public class PuddlesClient implements ClientModInitializer {
         // Colored Puddle Items & Blocks
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             int waterColor;
-            if (client.world != null) {
+            if (client.world != null && client.player != null) {
                 Biome biome = client.world.getBiome(client.player.getBlockPos());
                 waterColor = biome.getWaterColor();
             } else waterColor = BuiltinBiomes.PLAINS.getWaterColor();

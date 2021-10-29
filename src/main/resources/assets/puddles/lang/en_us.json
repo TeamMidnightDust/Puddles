@@ -1,3 +1,7 @@
 {
-	"block.puddles.puddle":"Puddle"
+	"block.puddles.puddle":"Puddle",
+	"puddles.midnightconfig.title": "Puddles Config",
+	"puddles.midnightconfig.puddleSpawnRate": "Puddle Spawn Rate",
+	"puddles.midnightconfig.snowStackChance": "Snow Stack Chance",
+	"puddles.midnightconfig.evaporationChance": "Evaporation Chance"
 }

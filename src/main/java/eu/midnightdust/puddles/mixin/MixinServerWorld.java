@@ -1,6 +1,7 @@
 package eu.midnightdust.puddles.mixin;
 
 import eu.midnightdust.puddles.Puddles;
+import eu.midnightdust.puddles.config.PuddlesConfig;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
@@ -20,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("deprecation")
 @Mixin(ServerWorld.class)
 public abstract class MixinServerWorld extends World {
     protected MixinServerWorld(MutableWorldProperties properties, RegistryKey<World> registryRef, DimensionType dimensionType, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed) {
@@ -37,9 +39,9 @@ public abstract class MixinServerWorld extends World {
         Profiler profiler = this.getProfiler();
         BlockPos pos;
 
-        if (this.getGameRules().getInt(Puddles.PUDDLE_SPAWN_RATE) != 0) {
+        if (PuddlesConfig.puddleSpawnRate != 0) {
             profiler.push("puddles");
-            if (bl && random.nextInt(10000 / this.getGameRules().getInt(Puddles.PUDDLE_SPAWN_RATE)) == 0) {
+            if (bl && random.nextInt(10000 / PuddlesConfig.puddleSpawnRate) == 0) {
                 pos = this.getSurface(getRandomPosInChunk(x, 0, z, 15));
                 if (this.hasRain(pos) && getBlockState(pos.down()).isSideSolidFullSquare(this, pos, Direction.UP) && Puddles.Puddle.canPlaceAt(null,this,pos)) {
                     setBlockState(pos, Puddles.Puddle.getDefaultState());
@@ -48,9 +50,9 @@ public abstract class MixinServerWorld extends World {
             profiler.pop();
         }
 
-        if (this.getGameRules().getInt(Puddles.SNOW_STACK_CHANCE) != 0) {
+        if (PuddlesConfig.snowStackChance != 0) {
             profiler.push("extra_snow");
-            if (bl && random.nextInt(10000 / this.getGameRules().getInt(Puddles.SNOW_STACK_CHANCE)) == 0) {
+            if (bl && random.nextInt(10000 / PuddlesConfig.snowStackChance) == 0) {
                 pos = this.getSurface(getRandomPosInChunk(x, 0, z, 15));
                 if (this.getBlockState(pos).getBlock() == Blocks.SNOW && getBlockState(pos.down()).isSideSolidFullSquare(this, pos, Direction.UP)) {
                     int layer = getBlockState(pos).get(Properties.LAYERS);
