@@ -1,0 +1,7 @@
+{
+	"block.puddles.puddle":"Puddle",
+	"puddles.midnightconfig.title": "Puddles Konfiguration",
+	"puddles.midnightconfig.puddleSpawnRate": "Puddle Erscheinungsrate",
+	"puddles.midnightconfig.snowStackChance": "Schneestapelchance",
+	"puddles.midnightconfig.evaporationChance": "Verdunstungschance"
+}
