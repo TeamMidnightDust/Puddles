@@ -20,9 +20,9 @@ public class PuddlesClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             int waterColor;
             if (client.world != null && client.player != null) {
-                Biome biome = client.world.getBiome(client.player.getBlockPos());
+                Biome biome = client.world.getBiome(client.player.getBlockPos()).value();
                 waterColor = biome.getWaterColor();
-            } else waterColor = BuiltinBiomes.PLAINS.getWaterColor();
+            } else waterColor = 4159204;
 
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> waterColor, Puddles.Puddle);
         });
