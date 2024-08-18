@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Puddles",
-  "description": "Adds puddles. Compatible with your favorite shaderpacks & mods!",
+  "description": "Adds puddles. Now fully server-sided!",
   "authors": [
     "Motschen",
     "TeamMidnightDust",
@@ -23,9 +23,6 @@
   "entrypoints": {
     "main": [
       "eu.midnightdust.puddles.Puddles"
-    ],
-    "client": [
-      "eu.midnightdust.puddles.PuddlesClient"
     ]
   },
 

@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "eu.midnightdust.puddles.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "MixinServerWorld"
   ],
