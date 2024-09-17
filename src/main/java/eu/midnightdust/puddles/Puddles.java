@@ -28,7 +28,7 @@ public class Puddles implements ModInitializer {
         Registry.register(Registries.ITEM, id("puddle"), new PolymerBlockItem(Puddle, new Item.Settings(), Items.POTION));
         ServerTickEvents.END_WORLD_TICK.register(world -> world.getPlayers().forEach(player -> {
             if (player.getBlockStateAtPos().getBlock() instanceof PuddleBlock) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 5, 255, true, false, true));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 5, 255, true, false, falset));
                 if (world.random.nextInt(30) == 0) player.playSound(SoundEvents.ENTITY_PLAYER_SWIM, SoundCategory.BLOCKS, 0.5f, 1.2f);
                 player.networkHandler.sendPacket(new ParticleS2CPacket(ParticleTypes.SPLASH, false, player.getBlockX() + 0.5f, player.getBlockY() + 0.1f, player.getBlockZ() + 0.5f, 0.5f, 0.1f, 0.5f, 1, 2));
             }
