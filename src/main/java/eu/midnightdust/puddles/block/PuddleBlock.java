@@ -22,13 +22,14 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potions;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -38,19 +39,22 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
+import xyz.nucleoid.packettweaker.PacketContext;
+
+import static eu.midnightdust.puddles.Puddles.PUDDLE_ID;
 
 public class PuddleBlock extends Block implements PolymerBlock, BlockWithElementHolder {
     public PuddleBlock() {
-        super(AbstractBlock.Settings.copy(Blocks.SHORT_GRASS));
+        super(AbstractBlock.Settings.copy(Blocks.SHORT_GRASS).registryKey(RegistryKey.of(RegistryKeys.BLOCK, PUDDLE_ID)));
     }
 
     @Override
-    public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack itemStack = player.getStackInHand(hand);
         if (itemStack.isEmpty()) {
-            return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
         } else {
             if (itemStack.getItem() == Items.GLASS_BOTTLE) {
                 if (!world.isClient) {
@@ -70,9 +74,9 @@ public class PuddleBlock extends Block implements PolymerBlock, BlockWithElement
                     world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 }
-                return ItemActionResult.success(world.isClient);
+                return ActionResult.SUCCESS;
             }
-            else return ItemActionResult.FAIL;
+            else return ActionResult.FAIL;
         }
     }
 
@@ -96,7 +100,7 @@ public class PuddleBlock extends Block implements PolymerBlock, BlockWithElement
     }
 
     @Override
-    public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+    public VoxelShape getCullingShape(BlockState state) {
         return VoxelShapes.empty();
     }
 
@@ -129,12 +133,13 @@ public class PuddleBlock extends Block implements PolymerBlock, BlockWithElement
         return world.getBlockState(pos.down()).isSideSolidFullSquare(world, pos, Direction.UP);
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom) {
-        return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
+        return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override
-    public BlockState getPolymerBlockState(BlockState state) {
+    public BlockState getPolymerBlockState(BlockState state, PacketContext context) {
         return Blocks.WATER.getDefaultState().with(FluidBlock.LEVEL, 7);
     }
 
@@ -148,7 +153,7 @@ public class PuddleBlock extends Block implements PolymerBlock, BlockWithElement
             @Override
             public void attack(ServerPlayerEntity player) {
                 player.playSoundToPlayer(SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.8f, 1.3f);
-                player.networkHandler.sendPacket(new ParticleS2CPacket(ParticleTypes.SPLASH, false, pos.getX() + 0.5f, pos.getY() + 0.1f, pos.getZ() + 0.5f, 0.5f, 0.1f, 0.5f, 1, 2));
+                player.networkHandler.sendPacket(new ParticleS2CPacket(ParticleTypes.SPLASH, false, false, pos.getX() + 0.5f, pos.getY() + 0.1f, pos.getZ() + 0.5f, 0.5f, 0.1f, 0.5f, 1, 2));
             }
         });
         interactionElement.setSize(1f, 0.06241f);
