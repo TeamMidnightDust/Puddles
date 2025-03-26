@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 	id "me.shedaniel.unified-publishing" version "0.1.+"
 }
@@ -130,7 +130,7 @@ unifiedPublishing {
 			curseforge {
 				token = CURSEFORGE_TOKEN
 				id = rootProject.curseforge_id
-				gameVersions.addAll "Java 21", project.minecraft_version, project.supported_versions
+				gameVersions.addAll "Java 21", project.minecraft_version
 			}
 		}
 
@@ -140,7 +140,7 @@ unifiedPublishing {
 				token = MODRINTH_TOKEN
 				id = rootProject.modrinth_id
 				version = "$project.version"
-				gameVersions.addAll project.minecraft_version, project.supported_versions
+				gameVersions.addAll project.minecraft_version
 			}
 		}
 	}

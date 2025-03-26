@@ -116,7 +116,7 @@ public class PuddleBlock extends Block implements PolymerBlock, BlockWithElement
             // Check if there are puddles on the sides of the block above
             for (i = 2; i < 6; ++i) {
                 BlockPos pos1 = pos.up();
-                if (world.getBlockState(pos1.offset(Direction.byId(i))).getBlock() instanceof PuddleBlock) {
+                if (world.getBlockState(pos1.offset(Direction.byIndex(i))).getBlock() instanceof PuddleBlock) {
                     // When sides of the block above have a puddle, don't place the puddle
                     return false;
                 }
@@ -124,7 +124,7 @@ public class PuddleBlock extends Block implements PolymerBlock, BlockWithElement
             // Check if there are puddles on the sides of the block below
             for (i = 2; i < 6; ++i) {
                 BlockPos pos1 = pos.down();
-                if (world.getBlockState(pos1.offset(Direction.byId(i))).getBlock() instanceof PuddleBlock) {
+                if (world.getBlockState(pos1.offset(Direction.byIndex(i))).getBlock() instanceof PuddleBlock) {
                     // When sides of the block below have a puddle, don't place the puddle
                     return false;
                 }
